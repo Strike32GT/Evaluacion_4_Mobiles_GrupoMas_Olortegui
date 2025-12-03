@@ -1,23 +1,30 @@
 package com.mas.lab_semana16_grupo_mas_olortegui.screens.auth
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.graphics.*
-import androidx.compose.ui.text.font.*
-import androidx.compose.ui.text.input.*
-import androidx.compose.ui.text.style.*
-import androidx.compose.ui.unit.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.mas.lab_semana16_grupo_mas_olortegui.presentation.auth.RegisterViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegisterScreen() {
-
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var confirmarPassword by remember { mutableStateOf("") }
+fun RegisterScreen(
+    onGoToLogin: () -> Unit = {},
+    onRegisterSuccess: () -> Unit = {}
+) {
+    val viewModel: RegisterViewModel = viewModel()
+    val uiState = viewModel.uiState
 
     Box(
         modifier = Modifier
@@ -25,22 +32,23 @@ fun RegisterScreen() {
             .background(
                 Brush.verticalGradient(
                     colors = listOf(
-                        Color(0xFF1C2833),
-                        Color(0xFF2E4053),
-                        Color(0xFF8E44AD)
+                        Color(0XFF1C2833),
+                        Color(0XFF2E4053),
+                        Color(0XFF8E44AD)
                     )
                 )
             )
-    ){
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(24.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
-        ){
+        ) {
+
             Text(
-                text = "Crear cuenta",
+                text = "Crear Cuenta",
                 color = Color.White,
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
@@ -48,89 +56,94 @@ fun RegisterScreen() {
             )
 
             Text(
-                text = "Registrate para gestionar tus tareas",
-                color = Color(0xFFE5E7E9),
+                text = "Regístrate para gestionar tus tareas",
+                color = Color(0XFFE5E7E9),
                 fontSize = 14.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(bottom = 32.dp)
             )
 
             Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(24.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = Color(0xFF8F9F9),
-                ),
-                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-            ){
-                Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp)
+            ) {
+
+                //---------------- EMAIL ----------------
+                OutlinedTextField(
+                    value = uiState.email,
+                    onValueChange = viewModel::onEmailChange,
+                    label = { Text("Correo Electrónico") },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(20.dp)
-                ){
+                        .padding(vertical = 8.dp),
+                    singleLine = true
+                )
+
+                //---------------- PASSWORD ----------------
+                OutlinedTextField(
+                    value = uiState.password,
+                    onValueChange = viewModel::onPasswordChange,
+                    label = { Text("Contraseña") },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    singleLine = true,
+                    visualTransformation = PasswordVisualTransformation()
+                )
+
+                //---------------- CONFIRM PASSWORD ----------------
+                OutlinedTextField(
+                    value = uiState.confirmPassword,
+                    onValueChange = viewModel::onConfirmPasswordChange,
+                    label = { Text("Repetir Contraseña") },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    singleLine = true,
+                    visualTransformation = PasswordVisualTransformation()
+                )
+
+
+                if (uiState.error != null) {
                     Text(
-                        text = "Registro",
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.SemiBold,
-                        modifier = Modifier.padding(bottom = 16.dp)
+                        text = uiState.error ?: "",
+                        color = Color.Red,
+                        fontSize = 14.sp,
+                        modifier = Modifier.padding(8.dp)
                     )
-
-                    OutlinedTextField(
-                        value = email,
-                        onValueChange = {email==it},
-                        label = {Text("Correo electronico")},
-                        singleLine = true,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 12.dp)
-                    )
-
-                    OutlinedTextField(
-                        value = password,
-                        onValueChange = {password==it},
-                        label = {Text("Correo electronico")},
-                        singleLine = true,
-                        visualTransformation = PasswordVisualTransformation(),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 12.dp)
-                    )
-
-                    OutlinedTextField(
-                        value = confirmarPassword,
-                        onValueChange = {confirmarPassword==it},
-                        label = {Text("Confirmar Contraseña")},
-                        singleLine = true,
-                        visualTransformation = PasswordVisualTransformation(),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 12.dp)
-                    )
+                }
 
 
-                    Button(
-                        onClick = {},
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(50.dp),
-                        shape = RoundedCornerShape(16.dp)
-                    ) {
-                        Text(
-                            "Crear cuenta"
-                        )
-
-                        Spacer(modifier = Modifier.height(12.dp))
-
-                        TextButton(
-                            onClick = {},
-                            modifier = Modifier.align(Alignment.CenterHorizontally)
-                        ) {
-                            Text(
-                                text = "Ya tienes cuenta, anda al Login",
-                                color = Color(0xFF8E44AD)
-                            )
+                Button(
+                    onClick = {
+                        viewModel.register { success ->
+                            if (success) onRegisterSuccess()
                         }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(50.dp)
+                        .padding(top = 20.dp),
+                    shape = RoundedCornerShape(16.dp)
+                ) {
+                    if (uiState.isLoading) {
+                        CircularProgressIndicator(
+                            strokeWidth = 2.dp,
+                            color = Color.White,
+                            modifier = Modifier.size(22.dp)
+                        )
+                    } else {
+                        Text("Registrarse")
                     }
+                }
+
+
+                TextButton(
+                    onClick = { /* tu navgraph ya se encarga */ },
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                ) {
+                    Text("¿Ya tienes cuenta? Inicia sesión", color = Color(0xFF8E44AD))
                 }
             }
         }
