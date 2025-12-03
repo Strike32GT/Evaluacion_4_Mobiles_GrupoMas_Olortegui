@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "411810169018",
+    "project_id": "lab16-grupomas-y-olortegui",
+    "storage_bucket": "lab16-grupomas-y-olortegui.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:411810169018:android:29dee3a711917b8b864283",
+        "android_client_info": {
+          "package_name": "com.mas.lab_semana16_grupo_mas_olortegui"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKgBlpOQYeqhRLSWUP9NR_sT3lcIZ_uEg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
