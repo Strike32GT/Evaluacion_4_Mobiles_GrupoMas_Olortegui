@@ -1,61 +1,59 @@
 package com.mas.lab_semana16_grupo_mas_olortegui.screens.tasks
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.mas.lab_semana16_grupo_mas_olortegui.components.TaskCard
+import com.mas.lab_semana16_grupo_mas_olortegui.components.TaskUi
+import com.mas.lab_semana16_grupo_mas_olortegui.presentation.task.TaskListViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TaskListScreen() {
+fun TaskListScreen(
+    onAddTask: () -> Unit = {},
+    onEditTask: (String) -> Unit = {}
+) {
+    val vm: TaskListViewModel = viewModel()
+    val ui = vm.uiState.collectAsState().value
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        text = "Mis tareas",
-                        fontWeight = FontWeight.SemiBold
-                    )
-                },
-                actions = {
-                    IconButton(onClick = {}) {
-                        Icon(
-                            imageVector = Icons.Default.MoreVert,
-                            contentDescription = "Menu"
-                        )
-                    }
-                }
+                title = { Text("Mis tareas") }
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = {}) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "Nueva Tarea"
-                )
+            FloatingActionButton(onClick = onAddTask) {
+                Icon(Icons.Default.Add, contentDescription = "Agregar tarea")
             }
         }
-    ){
-        innerPadding ->
-        Box(
+    ) { padding ->
+
+        Column(
             modifier = Modifier
+                .padding(padding)
                 .fillMaxSize()
                 .background(Color(0xFFF5F6FA))
-                .padding(innerPadding)
-        ){
+                .padding(8.dp)
+        ) {
 
+            ui.tasks.forEach { task ->
+                TaskCard(
+                    task = TaskUi.fromDto(task),
+                    onClick = { onEditTask(task.id) },
+                    onToggleComplete = { checked ->
+                        vm.onToggleCompleted(task.copy(completed = checked))
+                    }
+                )
+                Spacer(Modifier.height(8.dp))
+            }
         }
     }
 }

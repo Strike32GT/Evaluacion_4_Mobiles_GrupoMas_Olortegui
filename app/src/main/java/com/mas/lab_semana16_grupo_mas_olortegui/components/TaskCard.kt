@@ -4,17 +4,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
@@ -36,86 +30,46 @@ fun TaskCard(
             .fillMaxWidth()
             .clickable { onClick() },
         shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.White
-        ),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
+
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(14.dp)
+            modifier = Modifier.padding(14.dp)
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
+
                 Checkbox(
                     checked = task.isCompleted,
-                    onCheckedChange = { checked ->
-                        onToggleComplete(checked)
-                    }
+                    onCheckedChange = { onToggleComplete(it) }
                 )
 
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(start = 4.dp)
-                ) {
-                    Text(
-                        text = task.title,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.SemiBold
-                    )
+                Column(modifier = Modifier.weight(1f).padding(start = 4.dp)) {
 
-                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(task.title, fontWeight = FontWeight.Bold)
 
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
+                    Spacer(Modifier.height(4.dp))
+
+                    Row(verticalAlignment = Alignment.CenterVertically) {
                         Box(
                             modifier = Modifier
-                                .background(
-                                    color = priorityColor.copy(alpha = 0.12f),
-                                    shape = RoundedCornerShape(50)
-                                )
+                                .background(priorityColor.copy(alpha = 0.12f), RoundedCornerShape(50))
                                 .padding(horizontal = 8.dp, vertical = 2.dp)
                         ) {
-                            Text(
-                                text = task.priority,
-                                color = priorityColor,
-                                style = MaterialTheme.typography.bodySmall,
-                                fontWeight = FontWeight.Medium
-                            )
+                            Text(task.priority, color = priorityColor)
                         }
 
-                        Spacer(modifier = Modifier.width(8.dp))
+                        Spacer(Modifier.width(8.dp))
 
-                        Text(
-                            text = task.status,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = Color.Gray
-                        )
+                        Text(task.status, color = Color.Gray)
                     }
                 }
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(Modifier.height(8.dp))
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_calendar), // si no tienes icono, luego lo cambias
-                    contentDescription = "Fecha",
-                    tint = Color.Gray
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = task.dueDate,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = Color.Gray
-                )
-            }
+            Text("Fecha: ${task.dueDate}", color = Color.Gray)
         }
     }
 }
